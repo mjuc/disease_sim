@@ -21,9 +21,19 @@ def run_sim():
     print("Running simulation")
     pygame.event.post(run_sim_event)
 
+#set simulation parameters
 def set_params():
     population_size=slider_size.get_value()
     simulation_length=slider_length.get_value()
+
+#create simulated population
+def create_pop():
+    for i in range(population_size):
+        temp=Specimen()
+        temp.setCoordinates()
+        temp.setSpeed()
+        population.append(temp)
+        del(temp)
 
 pygame.init()
 pygame.display.set_caption("Disease sim")
@@ -32,8 +42,8 @@ screen.fill(WHITE)
 
 #menu
 #sliders
-slider_size = thorpy.SliderX(400, (100, 500), "Initial population")
-slider_length = thorpy.SliderX(400, (100,500), "Simulation length")
+slider_size = thorpy.SliderX(400, (100, 500), "Initial population(default 100)")
+slider_length = thorpy.SliderX(400, (100,500), "Simulation length(default 100)")
 #buttons
 run_sim_button = thorpy.make_button("Run simulation",func=run_sim)
 set_params_button = thorpy.make_button("Set parameters values",func=set_params)

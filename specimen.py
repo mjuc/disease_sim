@@ -7,7 +7,7 @@ import random
 # ZZ - healthy
 wellbeing=['C','Z','ZD','ZZ']
 gender=['M','F']
-reproduction_likeliness=30
+reproduction_likeliness=80
 reproduction_boudaries=[16,60]
 
 class Specimen:
@@ -22,28 +22,34 @@ class Specimen:
     alive=True
     max_immunity=0
     interacted_with=[]
+    screen_borders=[]
     
+    def Specimen(self):
+          self.alive=True
+            
     def __init__(self):
-        self.age=random(1,99)
-        self.state=random(wellbeing)
-        self.g=random(gender)
+        self.age=random.randrange(1,99)
+        self.state=random.choice(wellbeing)
+        self.g=random.choice(gender)
         if ((self.age > 0 and self.age < 15) or (self.age >=70 and self.age<=100)):
             self.max_immunity=3
-            self.immunity=random(0,3) #possibility of instant death
+            self.immunity=random.randrange(0,3) #possibility of instant death
         elif (self.age >= 40 and self.age <70):
             self.max_immunity=6
-            self.immunity=random(4,6)
+            self.immunity=random.randrange(4,6)
         elif (self.age >= 15 and self.age < 40):
             self.max_immunity=10
-            self.immunity=random(7,10)
+            self.immunity=random.randrange(7,10)
     
     def setCoordinates(self,screen_x,screen_y):
-        self.x=random(0,screen_x)
-        self.y=random(0,screen_y)
+        self.x=random.randrange(0,screen_x)
+        self.y=random.randrange(0,screen_y)
+        self.screen_borders.append(screen_x)
+        self.screen_borders.append(screen_y)
         
     def setSpeed(self):
-        self.v[0]=random(-3,3)
-        self.v[1]=random(-3,3)
+        self.v[0]=random.randrange(-3,3)
+        self.v[1]=random.randrange(-3,3)
         
     def move(self):
         self.x+=self.v[0]
@@ -57,13 +63,13 @@ class Specimen:
         self.age+=1
         if self.age==15:
             self.max_immunity=10
-            self.immunity=random(7,10)
+            self.immunity=random.randrange(7,10)
         elif self.age==40:
             self.max_immunity=6
-            self.immunity=random(4,6)
+            self.immunity=random.randrange(4,6)
         elif self.age==70:
             self.max_immunity=3
-            self.immunity=random(0,3)
+            self.immunity=random.randrange(0,3)
         if self.age == 100 or self.immunity==0: #possibility of instant death
             self.alive=False
         if self.state=='Z':
@@ -163,37 +169,39 @@ class Specimen:
                 if ((s.x == self.x+1) and (s.y == self.y or s.y == self.y+1 or s.y == self.y-1)):
                     self.infect(s)
                     if(s.g != self.g):
-                        l = random(0,100)
+                        l = random.randrange(0,100)
                         if l<=reproduction_likeliness:
                             if self.age>=reproduction_boudaries[0] and self.age<=reproduction_boudaries[1]:
                                 if s.age>=reproduction_boudaries[0] and s.age<=reproduction_boudaries[1]:
-                                    temp=Specimen()
+                                    temp=Specimen
                                     temp.setSpeed()
-                                    temp.setCoordinates()
+                                    temp.setCoordinates(self.screen_borders[0],self.screen_borders[1])
                                     children.append(temp)
                                     del(temp)   
                 elif ((s.x == self.x-1) and (s.y == self.y or s.y == self.y+1 or s.y == self.y-1)):
                     self.infect(s)
                     if(s.g != self.g):
-                        l = random(0,100)
+                        l = random.randrange(0,100)
                         if l<=reproduction_likeliness:
                             if self.age>=reproduction_boudaries[0] and self.age<=reproduction_boudaries[1]:
                                 if s.age>=reproduction_boudaries[0] and s.age<=reproduction_boudaries[1]:
-                                    temp=Specimen()
+                                    temp=Specimen
                                     temp.setSpeed()
-                                    temp.setCoordinates()
+                                    temp.setCoordinates(self.screen_borders[0],self.screen_borders[1])
                                     children.append(temp)
                                     del(temp)
                 elif ((s.x == self.x) and (s.y == self.y+1 or s.y == self.y-1)):
                     self.infect(s)
                     if(s.g != self.g):
-                        l = random(0,100)
+                        l = random.randrange(0,100)
                         if l<=reproduction_likeliness:
                             if self.age>=reproduction_boudaries[0] and self.age<=reproduction_boudaries[1]:
                                 if s.age>=reproduction_boudaries[0] and s.age<=reproduction_boudaries[1]:
-                                    temp=Specimen()
+                                    temp=Specimen
                                     temp.setSpeed()
-                                    temp.setCoordinates()
+                                    temp.setCoordinates(self.screen_borders[0],self.screen_borders[1])
                                     children.append(temp)
                                     del(temp)
         return children
+    def clean(self):
+        self.interacted_with=[]
